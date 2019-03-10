@@ -1,0 +1,78 @@
+ssc install estout, replace
+
+gen basewoNE = baseco if rich != 1
+gen basewoAfrica = baseco if africa != 1
+
+*Table 4
+*Panel A
+ivreg logpgp95 (avexpr = logem4) if baseco == 1
+estimates store A_1
+
+ivreg logpgp95 lat_abst (avexpr = logem4 lat_abst) if baseco == 1
+estimates store A_2
+
+ivreg logpgp95 (avexpr = logem4) if basewoNE == 1
+estimates store A_3
+
+ivreg logpgp95 lat_abst (avexpr = logem4 lat_abst) if basewoNE == 1
+estimates store A_4
+
+ivreg logpgp95 (avexpr = logem4) if basewoAfrica == 1
+estimates store A_5
+
+ivreg logpgp95 lat_abst (avexpr = logem4 lat_abst) if basewoAfrica == 1
+estimates store A_6
+
+ivreg loghjypl (avexpr = logem4) if baseco == 1
+estimates store A_9
+
+estout A_1 A_2 A_3 A_4 A_5 A_6 A_9, cells(b(star fmt(3)) se(par fmt(2)))
+
+*Panel B
+reg avexpr logem4 if baseco == 1
+estimates store B_1
+
+reg avexpr logem4 lat_abst if baseco == 1
+estimates store B_2
+
+reg avexpr logem4 if basewoNE == 1
+estimates store B_3
+
+reg avexpr logem4 lat_abst if basewoNE == 1
+estimates store B_4
+
+reg avexpr logem4 if basewoAfrica == 1
+estimates store B_5
+
+reg avexpr logem4 lat_abst if basewoAfrica == 1
+estimates store B_6
+
+reg avexpr logem4 if baseco == 1
+estimates store B_9
+
+estout B_1 B_2 B_3 B_4 B_5 B_6 B_9 
+
+*Panel C
+reg logpgp95 avexpr if baseco == 1
+estimates store C_1
+
+reg logpgp95 avexpr lat_abst if baseco == 1
+estimates store C_2
+
+reg logpgp95 avexpr if basewoNE == 1
+estimates store C_3
+
+reg logpgp95 avexpr lat_abst if basewoNE == 1
+estimates store C_4
+
+reg logpgp95 avexpr if basewoAfrica == 1
+estimates store C_5
+
+reg logpgp95 avexpr lat_abst if basewoAfrica == 1
+estimates store C_6
+
+reg loghjypl avexpr if baseco == 1
+estimates store C_9
+
+estout C_1 C_2 C_3 C_4 C_5 C_6 C_9
+
