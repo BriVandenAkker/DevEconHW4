@@ -1,9 +1,15 @@
 ssc install estout, replace
 
+use "L:\AJRProbSet4.dta", clear
+
 gen basewoNE = baseco if rich != 1
 gen basewoAfrica = baseco if africa != 1
 
-*Table 4
+*This may be different from paper, don't end up using do to collinearity issues.
+*Not sure how to derive from this data to match perfectly with what the authors use. 
+gen other = 1 if (shortnam == "AUS" | shortnam == "NZL" | shortnam == "MLT")
+
+
 *Panel A
 ivreg logpgp95 (avexpr = logem4) if baseco == 1
 estimates store A_1
@@ -23,10 +29,14 @@ estimates store A_5
 ivreg logpgp95 lat_abst (avexpr = logem4 lat_abst) if basewoAfrica == 1
 estimates store A_6
 
+ivreg logpgp95 lat_abst (avexpr = logem4 asia africa) asia africa if basewoAfrica == 1
+estimates store A_7
+
+ivreg logpgp95 lat_abst (avexpr = logem4 lat_abst asia africa) asia africa if basewoAfrica == 1
+estimates store A_8
+
 ivreg loghjypl (avexpr = logem4) if baseco == 1
 estimates store A_9
-
-estout A_1 A_2 A_3 A_4 A_5 A_6 A_9, cells(b(star fmt(3)) se(par fmt(2)))
 
 *Panel B
 reg avexpr logem4 if baseco == 1
@@ -47,10 +57,14 @@ estimates store B_5
 reg avexpr logem4 lat_abst if basewoAfrica == 1
 estimates store B_6
 
+reg avexpr logem4 asia africa if baseco == 1
+estimates store B_7
+
+reg avexpr logem4 lat_abst asia africa if baseco == 1
+estimates store B_8
+
 reg avexpr logem4 if baseco == 1
 estimates store B_9
-
-estout B_1 B_2 B_3 B_4 B_5 B_6 B_9 
 
 *Panel C
 reg logpgp95 avexpr if baseco == 1
@@ -71,8 +85,17 @@ estimates store C_5
 reg logpgp95 avexpr lat_abst if basewoAfrica == 1
 estimates store C_6
 
+reg logpgp95 avexpr asia africa if baseco == 1
+estimates store C_7
+
+reg logpgp95 avexpr lat_abst asia africa if baseco == 1
+estimates store C_8
+
 reg loghjypl avexpr if baseco == 1
 estimates store C_9
 
-estout C_1 C_2 C_3 C_4 C_5 C_6 C_9
+*Display Table 4
+esttab A_1 A_2 A_3 A_4 A_5 A_6 A_7 A_8 A_9, b(a2) se compress nostar noconstant noobs label title("Panel A: Two-Stage Least Squares")
+esttab B_1 B_2 B_3 B_4 B_5 B_6 B_7 B_8 B_9, b(a2) se r2(2) compress nostar noconstant noobs label title("Panel B: First Stage for Average Protection Against Expropriation Risk in 1985-1995")
+esttab C_1 C_2 C_3 C_4 C_5 C_6 C_7 C_8 C_9, keep(avexpr) b(a2) se(2) compress nostar label title("Panel C: Ordinary Least Squares")
 
