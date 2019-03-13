@@ -1,0 +1,134 @@
+ssc install estout, replace
+use "L:\AJRProbSet4.dta", clear
+
+*Table 8
+*Panel A
+
+ivreg logpgp95 (avexpr = euro1900) if baseco == 1
+estimates store a1
+
+ivreg logpgp95 (avexpr = euro1900 lat_abst) lat_abst if baseco == 1
+estimates store a2
+
+ivreg logpgp95 (avexpr = cons00a) if baseco == 1
+estimates store a3
+
+ivreg logpgp95 (avexpr = cons00a lat_abst) lat_abst if baseco == 1
+estimates store a4
+
+ivreg logpgp95 (avexpr = democ00a) if baseco == 1
+estimates store a5
+
+ivreg logpgp95 (avexpr = democ00a lat_abst) lat_abst if baseco == 1
+estimates store a6
+
+ivreg logpgp95 (avexpr = cons1) if baseco == 1
+estimates store a7
+
+ivreg logpgp95 (avexpr = cons1 lat_abst) lat_abst if baseco == 1
+estimates store a8
+
+ivreg logpgp95 (avexpr = democ1) if baseco == 1
+estimates store a9
+
+ivreg logpgp95 (avexpr = democ1 lat_abst) lat_abst if baseco == 1
+estimates store a10
+
+*Panel B
+reg avexpr euro1900 if baseco == 1
+estimates store b1
+
+reg avexpr euro1900 lat_abst if baseco == 1
+estimates store b2
+
+reg avexpr cons00a if baseco == 1
+estimates store b3
+
+reg avexpr cons00a lat_abst if baseco == 1
+estimates store b4
+
+reg avexpr democ00a if baseco == 1
+estimates store b5
+
+reg avexpr democ00a lat_abst if baseco == 1
+estimates store b6
+
+reg avexpr cons1 if baseco == 1
+estimates store b7
+
+reg avexpr cons1 lat_abst if baseco == 1
+estimates store b8
+
+reg avexpr democ1 if baseco == 1
+estimates store b9
+
+reg avexpr democ1 lat_abst if baseco == 1
+estimates store b10
+
+*Panel C
+ivreg logpgp95 (avexpr = euro1900 logem4) if baseco == 1
+overid
+*Not sure how to retrieve and tabulate stored chi-sq p-value or which test to use. 
+ivreg logpgp95 (avexpr = euro1900 logem4 lat_abst) lat_abst if baseco == 1
+overid
+
+ivreg logpgp95 (avexpr = cons00a logem4) if baseco == 1
+overid
+
+ivreg logpgp95 (avexpr = cons00a logem4 lat_abst) lat_abst if baseco == 1
+overid
+
+ivreg logpgp95 (avexpr = democ00a logem4) if baseco == 1
+overid
+
+ivreg logpgp95 (avexpr = democ00a logem4 lat_abst) lat_abst if baseco == 1
+overid
+
+ivreg logpgp95 (avexpr = cons1 logem4) if baseco == 1
+overid
+
+ivreg logpgp95 (avexpr = cons1 logem4 lat_abst) lat_abst if baseco == 1
+overid
+
+ivreg logpgp95 (avexpr = democ1 logem4) if baseco == 1
+overid
+
+ivreg logpgp95 (avexpr = democ1 logem4 lat_abst) lat_abst if baseco == 1
+overid
+
+*Panel D
+ivreg logpgp95 (avexpr = euro1900) logem4 if baseco == 1
+estimates store d1
+
+ivreg logpgp95 (avexpr = euro1900 lat_abst) logem4 lat_abst if baseco == 1
+estimates store d2
+
+ivreg logpgp95 (avexpr = cons00a) logem4 if baseco == 1
+estimates store d3
+
+ivreg logpgp95 (avexpr = cons00a lat_abst) logem4 lat_abst if baseco == 1
+estimates store d4
+
+ivreg logpgp95 (avexpr = democ00a) logem4 if baseco == 1
+estimates store d5
+
+ivreg logpgp95 (avexpr = democ00a lat_abst) logem4 lat_abst if baseco == 1
+estimates store d6
+
+ivreg logpgp95 (avexpr = cons1) logem4 if baseco == 1
+estimates store d7
+
+ivreg logpgp95 (avexpr = cons1 lat_abst) logem4 lat_abst if baseco == 1
+estimates store d8
+
+ivreg logpgp95 (avexpr = democ1) logem4 if baseco == 1
+estimates store d9
+
+ivreg logpgp95 (avexpr = democ1 lat_abst) logem4 lat_abst if baseco == 1
+estimates store d10
+
+
+*Display Table 8
+esttab a1 a2 a3 a4 a5 a6 a7 a8 a9 a10, b(a2) se compress nostar noconstant noobs label title("Panel A: Two-Stage Least Squares")
+esttab b1 b2 b3 b4 b5 b6 b7 b8 b9 b10, b(a2) se r2(2) compress nostar noconstant noobs label title("Panel B: First Stage for Average Protection against Expropriation Risk")
+esttab d1 d2 d3 d4 d5 d6 d7 d8 d9 d10, b(a2) se compress nostar noconstant noobs label title("Panel D: Second Stage with Log Mortality as Exogenous Variable")
