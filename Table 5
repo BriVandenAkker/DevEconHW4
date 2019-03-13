@@ -1,15 +1,18 @@
+ssc install estout, replace
+use "L:\AJRProbSet4.dta", clear
+
 *Table 5
 *Panel A
 ivreg logpgp95 (avexpr = logem4 f_brit f_french) f_brit f_french if baseco == 1
 estimates store A1
 
-ivreglogpgp95 (avexpr = logem4 lat_abst f_brit f_french) lat_abst f_brit f_french if baseco == 1
+ivreg logpgp95 (avexpr = logem4 lat_abst f_brit f_french) lat_abst f_brit f_french if baseco == 1
 estimates store A2
 
 ivreg logpgp95 (avexpr = logem4) if f_brit == 1
 estimates store A3
 
-ivreg logpgp95 (avexpr = logem4 lat_abst) lab_abst if f_brit == 1
+ivreg logpgp95 (avexpr = logem4 lat_abst) lat_abst if f_brit == 1
 estimates store A4
 
 ivreg logpgp95 (avexpr = logem4 sjlofr) sjlofr if baseco == 1
@@ -24,17 +27,14 @@ estimates store A7
 ivreg logpgp95 (avexpr = logem4 lat_abst catho80 muslim80 no_cpm80) lat_abst catho80 muslim80 no_cpm80 if baseco == 1
 estimates store A8
 
-ivreglogpgp95 (avexpr = logem4 lat_abst f_french sjlofr catho80 muslim80 no_cpm80) lat_abst f_french sjlofr catho80 muslim80 no_cpm80 if baseco == 1
+ivreg logpgp95 (avexpr = logem4 lat_abst f_french sjlofr catho80 muslim80 no_cpm80) lat_abst f_french sjlofr catho80 muslim80 no_cpm80 if baseco == 1
 estimates store A9
-
-estout A1 A2 A3 A4 A5 A6 A7 A8 A9
-
 
 *Panel B
 reg avexpr logem4 f_brit f_french if baseco == 1
 estimates store B1
 
-reg avexpr logem4 lat_abst f_brit f_french baseco == 1
+reg avexpr logem4 lat_abst f_brit f_french if baseco == 1
 estimates store B2
 
 reg avexpr logem4 if f_brit == 1
@@ -58,34 +58,37 @@ estimates store B8
 reg avexpr logem4 lat_abst f_french sjlofr catho80 muslim80 no_cpm80 if baseco == 1
 estimates store B9
 
-estout B1 B2 B3 B4 B5 B6 B7 B8 B9
-
 *Panel C
-ivreg logpgp95 avexpr f_brit f_french if baseco == 1
+reg logpgp95 avexpr f_brit f_french if baseco == 1
 estimates store C1
 
-ivreglogpgp95 avexpr lat_abst f_brit f_french if baseco == 1
+reg logpgp95 avexpr lat_abst f_brit f_french if baseco == 1
 estimates store C2
 
-ivreg logpgp95 avexprif f_brit == 1
+reg logpgp95 avexpr if f_brit == 1
 estimates store C3
 
-ivreg logpgp95 avexpr lab_abst if f_brit == 1
+reg logpgp95 avexpr lat_abst if f_brit == 1
 estimates store C4
 
-ivreg logpgp95 avexpr sjlofr if baseco == 1
+reg logpgp95 avexpr sjlofr if baseco == 1
 estimates store C5
 
-ivreg logpgp95 avexpr lat_abst sjlofr if baseco == 1
+reg logpgp95 avexpr lat_abst sjlofr if baseco == 1
 estimates store C6
 
-ivreg logpgp95 avexpr catho80 muslim80 no_cpm80 if baseco == 1
+reg logpgp95 avexpr catho80 muslim80 no_cpm80 if baseco == 1
 estimates store C7
 
-ivreg logpgp95 avexpr lat_abst catho80 muslim80 no_cpm80 if baseco == 1
+reg logpgp95 avexpr lat_abst catho80 muslim80 no_cpm80 if baseco == 1
 estimates store C8
 
-ivreglogpgp95 avexpr lat_abst f_french sjlofr catho80 muslim80 no_cpm80 if baseco == 1
+reg logpgp95 avexpr lat_abst f_french sjlofr catho80 muslim80 no_cpm80 if baseco == 1
 estimates store C9
 
-estout C1 C2 C3 C4 C5 C6 C7 C8 C9
+
+*Display Table 5
+esttab A1 A2 A3 A4 A5 A6 A7 A8 A9, b(a2) se compress nostar noconstant noobs label title("Panel A: Two-Stage Least Squares")
+esttab B1 B2 B3 B4 B5 B6 B7 B8 B9, b(a2) r2(2) se compress nostar noconstant noobs label title("Panel B: First Stage for Average Protection Against Expropriation Risk in 1985-1995")
+esttab C1 C2 C3 C4 C5 C6 C7 C8 C9, keep(avexpr) b(a2) se compress nostar label title("Panel C: Ordinary Least Squares")
+
